@@ -1,0 +1,12 @@
+# Core stack for the Human-or-AI text classification project.
+# Left unpinned on purpose; once everyone's environment works, run
+#   pip freeze > requirements.txt
+# to lock exact versions so all three machines match.
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+tqdm
+ipykernel
+torch
