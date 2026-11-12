@@ -28,6 +28,7 @@ Download the competition files from Kaggle and place them in `data/` (not commit
 submissions/group-number-25/data/train.csv
 submissions/group-number-25/data/test.csv
 submissions/group-number-25/data/sample_submission.csv
+submissions/group-number-25/data/unlabeled.csv   # only for 05_modelB_analysis
 ```
 
 ## Write `submission.csv` (final model: Model B)
@@ -52,6 +53,7 @@ $NB notebooks/01_baseline.ipynb            # baseline; writes the shared split I
 $NB notebooks/02_modelB.ipynb              # Model B (final submission)
 $NB notebooks/03_nn_from_scratch.ipynb     # TF-IDF MLP + text CNN (needs torch)
 $NB notebooks/04_training_data_size.ipynb  # learning curve for the baseline
+$NB notebooks/05_modelB_analysis.ipynb     # Model B: learning curve, self-training, error analysis
 ```
 
 | Notebook | Model | Validation AUROC |
@@ -76,13 +78,13 @@ No hyperparameter or blend weight was chosen with validation or test labels:
 - Logistic regression and `HistGradientBoostingClassifier`: `random_state=42`. `GridSearchCV` / `cross_val_predict` use unshuffled stratified 3-fold CV, which is deterministic.
 - Neural networks: inner early-stopping split `random_state=42`; PyTorch seeds `0, 1, 2` (predictions averaged). GPU (MPS/CUDA) runs can differ very slightly between runs.
 - Preprocessing (Model B): all whitespace is collapsed to single spaces in every passage, because 66% of AI training passages contain blank lines and no human passages do (a data-collection artifact).
-- No pretrained models, external data, or the unlabeled set are used. Competition data and generated CSVs are not committed.
+- No pretrained models or external data are used. The unlabeled set is used only in the self-training experiment in `05_modelB_analysis.ipynb`; it did not help (0.9685 vs. 0.9700 validation AUROC) and is not part of the final submission. Competition data and generated CSVs are not committed.
 
 ## AI assistance
 
 Claude (Anthropic) was used through the Claude app:
 
-- **Code:** it wrote most of `03_nn_from_scratch.ipynb` (architectures, hyperparameter grid, training loop).
+- **Code:** it wrote most of `03_nn_from_scratch.ipynb` (architectures, hyperparameter grid, training loop) and `02_modelB.ipynb` / `05_modelB_analysis.ipynb` (Model B and its analysis).
 - **Setup:** it guided the Git/GitHub and VS Code setup.
 - **Analysis:** it compared the team's models from saved validation predictions, including a bootstrap check of Model B's lead.
 - **Submission:** it prepared this submission branch: filtering data files out of the history, merging Model B, and writing this README.
